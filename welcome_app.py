@@ -16,6 +16,14 @@ bot = TeleBot(BOT_TOKEN, parse_mode="HTML")
 
 app = Flask(__name__)
 
+SECTION_LINKS = {
+    "info":        "https://t.me/c/3056610802/4/1",   # <- your real link
+    "rules":       "https://t.me/c/3056610802/5/1",
+    "reviews":     "https://t.me/c/3056610802/6/1",
+    "giveaways":   "https://t.me/c/3056610802/7/1",
+    "announce":    "https://t.me/c/3056610802/8/1",
+}
+
 # --- Utility: internal "t.me/c" id from chat_id ---
 def internal_chat_id(chat_id: int) -> str:
     """
@@ -40,18 +48,15 @@ def welcome_new_member(message):
     # Inline buttons for main topics (replace message IDs with yours)
     markup = types.InlineKeyboardMarkup()
     markup.add(
-        types.InlineKeyboardButton("ℹ️ Service Info", url=f"{base}/7"),
-        types.InlineKeyboardButton("❗ Rules",        url=f"{base}/13")
+        types.InlineKeyboardButton("ℹ️ Service Info", url=SECTION_LINKS["info"]),
+        types.InlineKeyboardButton("❗ Rules",         url=SECTION_LINKS["rules"]),
     )
     markup.add(
-        types.InlineKeyboardButton("⭐ Reviews",      url=f"{base}/3"),
-        types.InlineKeyboardButton("🎁 Giveaways",   url=f"{base}/2")
+        types.InlineKeyboardButton("⭐ Reviews",       url=SECTION_LINKS["reviews"]),
+        types.InlineKeyboardButton("🎁 Giveaways",    url=SECTION_LINKS["giveaways"]),
     )
     markup.add(
-        types.InlineKeyboardButton("📢 Announcements", url=f"{base}/9")
-    )
-    markup.add(
-        types.InlineKeyboardButton("🍴 Place your order – Reserve with £50 off", url="https://t.me/axel_fork_bot")
+        types.InlineKeyboardButton("📢 Announcements", url=SECTION_LINKS["announce"]),
     )
 
     # Send one welcome per new member (Telegram may batch joins)
