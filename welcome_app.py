@@ -78,8 +78,6 @@ def welcome_new_member(message):
         welcome_text = (
             f"✨ Welcome to Golden Fork, {mention}! ✨\n"
             f"The place where every reservation means £50 in savings.\n\n"
-            f"<b>Main Sections</b>:\n"
-            f"ℹ️ Service Info | ❗ Rules | ⭐ Reviews | 🎁 Giveaways | 📢 Announcements\n\n"
             f"👉 To get started, pick an option below:"
         )
 
