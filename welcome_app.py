@@ -16,13 +16,17 @@ bot = TeleBot(BOT_TOKEN, parse_mode="HTML")
 
 app = Flask(__name__)
 
+
+# Put this near the top of welcome_app.py
 SECTION_LINKS = {
-    "info":        "https://t.me/c/3056610802/4/1",   # <- your real link
-    "rules":       "https://t.me/c/3056610802/5/1",
-    "reviews":     "https://t.me/c/3056610802/6/1",
-    "giveaways":   "https://t.me/c/3056610802/7/1",
-    "announce":    "https://t.me/c/3056610802/8/1",
+    # REPLACE these with the links you copied from Telegram
+    "info":       "https://t.me/c/3056610802/4/1",
+    "rules":      "https://t.me/c/3056610802/5/1",
+    "reviews":    "https://t.me/c/3056610802/6/1",
+    "giveaways":  "https://t.me/c/3056610802/7/1",
+    "announce":   "https://t.me/c/3056610802/8/1",
 }
+
 
 # --- Utility: internal "t.me/c" id from chat_id ---
 def internal_chat_id(chat_id: int) -> str:
@@ -49,15 +53,21 @@ def welcome_new_member(message):
     markup = types.InlineKeyboardMarkup()
     markup.add(
         types.InlineKeyboardButton("ℹ️ Service Info", url=SECTION_LINKS["info"]),
-        types.InlineKeyboardButton("❗ Rules",         url=SECTION_LINKS["rules"]),
+        types.InlineKeyboardButton("❗ Rules",         url=SECTION_LINKS["rules"])
     )
     markup.add(
         types.InlineKeyboardButton("⭐ Reviews",       url=SECTION_LINKS["reviews"]),
-        types.InlineKeyboardButton("🎁 Giveaways",    url=SECTION_LINKS["giveaways"]),
+        types.InlineKeyboardButton("🎁 Giveaways",    url=SECTION_LINKS["giveaways"])
     )
     markup.add(
-        types.InlineKeyboardButton("📢 Announcements", url=SECTION_LINKS["announce"]),
+        types.InlineKeyboardButton("📢 Announcements", url=SECTION_LINKS["announce"])
     )
+    markup.add(
+        # Deep link so mobile opens your bot and starts the flow cleanly
+        types.InlineKeyboardButton("🍴 Place your order – Reserve with £50 off",
+                                url="https://t.me/axel_fork_bot?start=reserve")
+    )
+
 
     # Send one welcome per new member (Telegram may batch joins)
     for new_member in message.new_chat_members:
