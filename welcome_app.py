@@ -20,11 +20,11 @@ app = Flask(__name__)
 # Put this near the top of welcome_app.py
 SECTION_LINKS = {
     # REPLACE these with the links you copied from Telegram
-    "info":       "https://t.me/c/3056610802/4/1",
-    "rules":      "https://t.me/c/3056610802/5/1",
-    "reviews":    "https://t.me/c/3056610802/6/1",
-    "giveaways":  "https://t.me/c/3056610802/7/1",
-    "announce":   "https://t.me/c/3056610802/8/1",
+    "info":       "https://t.me/c/3056610802/7/1",
+    "rules":      "https://t.me/c/3056610802/2/1",
+    "reviews":    "https://t.me/c/3056610802/5/1",
+    "giveaways":  "https://t.me/c/3056610802/4/1",
+    "announce":   "https://t.me/c/3056610802/1/1",
 }
 
 
