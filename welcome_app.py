@@ -80,7 +80,6 @@ def welcome_new_member(message):
             f"The place where every reservation means £50 in savings.\n\n"
             f"👉 To get started, pick an option below:"
         )
-
         # If the group uses topics, reply in the same thread
         kwargs = {}
         if getattr(message, "message_thread_id", None):
@@ -91,6 +90,7 @@ def welcome_new_member(message):
             welcome_text,
             reply_markup=markup,
             disable_web_page_preview=True,
+            disable_notification=True,
             **kwargs
         )
 
