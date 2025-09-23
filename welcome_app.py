@@ -72,14 +72,14 @@ def welcome_new_member(message):
     # Send one welcome per new member (Telegram may batch joins)
     for new_member in message.new_chat_members:
         display_name = (new_member.first_name or "there").strip()
-        # Safer mention (escape display name for HTML)
-        mention = f'<a href="tg://user?id={new_member.id}">{html.escape(display_name)}</a>'  # NEW
+        mention = html.escape(display_name)  # fake mention, no notification
 
         welcome_text = (
             f"✨ Welcome to Golden Fork, {mention}! ✨\n"
             f"The place where every reservation means £50 in savings.\n\n"
             f"👉 To get started, pick an option below:"
         )
+
         # If the group uses topics, reply in the same thread
         kwargs = {}
         if getattr(message, "message_thread_id", None):
