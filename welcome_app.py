@@ -43,9 +43,29 @@ def chat_link_base(chat):
         return f"https://t.me/{chat.username}"
     return f"https://t.me/c/{internal_chat_id(chat.id)}"
 
+# Global variable to store pinned message ID
+PINNED_MSG_ID = None
+
 # --- WELCOME HANDLER ---
 @bot.message_handler(content_types=['new_chat_members'])
 def welcome_new_member(message):
+    global PINNED_MSG_ID
+
+    # Collect all new members' names
+    new_names = []
+
+    for new_member in message.new_chat_members:
+        display_name = (new_member.first_name or "there").strip()
+        new_names.append(html.escape(display_name))
+
+    joined_text = ", ".join(new_names)
+
+    welcome_text = (
+        f"✨ Welcome to Golden Fork, {joined_text}! ✨\n"
+        f"The place where every reservation means £50 in savings.\n\n"
+        f"👉 To get started, pick an option below:"
+    )
+
     # Compute base link prefix for this chat (public link if exists, else t.me/c)
     base = chat_link_base(message.chat)  # NEW
 
@@ -68,24 +88,13 @@ def welcome_new_member(message):
                                 url="https://t.me/axel_fork_bot?start=reserve")
     )
 
+    kwargs = {}
+    if getattr(message, "message_thread_id", None):
+        kwargs["message_thread_id"] = message.message_thread_id
 
-    # Send one welcome per new member (Telegram may batch joins)
-    for new_member in message.new_chat_members:
-        display_name = (new_member.first_name or "there").strip()
-        mention = html.escape(display_name)  # fake mention, no notification
-
-        welcome_text = (
-            f"✨ Welcome to Golden Fork, {mention}! ✨\n"
-            f"The place where every reservation means £50 in savings.\n\n"
-            f"👉 To get started, pick an option below:"
-        )
-
-        # If the group uses topics, reply in the same thread
-        kwargs = {}
-        if getattr(message, "message_thread_id", None):
-            kwargs["message_thread_id"] = message.message_thread_id
-
-        bot.send_message(
+    # If we don't have a pinned message yet → create one
+    if PINNED_MSG_ID is None:
+        sent = bot.send_message(
             message.chat.id,
             welcome_text,
             reply_markup=markup,
@@ -93,6 +102,20 @@ def welcome_new_member(message):
             disable_notification=True,
             **kwargs
         )
+        PINNED_MSG_ID = sent.message_id
+        bot.pin_chat_message(message.chat.id, PINNED_MSG_ID, disable_notification=True)
+    else:
+        # Edit the existing pinned message
+        try:
+            bot.edit_message_text(
+                chat_id=message.chat.id,
+                message_id=PINNED_MSG_ID,
+                text=welcome_text,
+                reply_markup=markup,
+                disable_web_page_preview=True
+            )
+        except Exception as e:
+            print(f"⚠️ Could not edit pinned message: {e}")
 
 # --- Flask / webhook plumbing ---
 @app.get("/health")
