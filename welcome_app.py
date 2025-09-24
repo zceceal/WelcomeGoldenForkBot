@@ -104,7 +104,14 @@ def welcome_new_member(message):
             **kwargs
         )
         PINNED_MSG_ID = sent.message_id
-        bot.pin_chat_message(message.chat.id, PINNED_MSG_ID, disable_notification=True)
+
+        # ✅ Try to pin the first welcome message
+        try:
+            bot.pin_chat_message(message.chat.id, PINNED_MSG_ID, disable_notification=True)
+            print(f"📌 Successfully pinned message {PINNED_MSG_ID}")
+        except Exception as e:
+            print(f"⚠️ Failed to pin message: {e}")
+
     else:
         # Edit the existing pinned message
         try:
