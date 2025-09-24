@@ -53,10 +53,11 @@ def welcome_new_member(message):
 
     # Collect all new members' names
     new_names = []
-
     for new_member in message.new_chat_members:
         display_name = (new_member.first_name or "there").strip()
-        new_names.append(html.escape(display_name))
+        mention = f'<a href="tg://user?id={new_member.id}">{html.escape(display_name)}</a>'
+        new_names.append(mention)
+
 
     joined_text = ", ".join(new_names)
 
